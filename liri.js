@@ -10,8 +10,10 @@ var twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request'); //used for OMDB
 
+// --- get Tweets function --- //
 var getTweets = function() {
   console.log('tweet function');
+// --- creating new variable with constructor --- //
   var client = new twitter(dataKeys.twitterKeys);
 
   var params = { screen_name: 'jessienyasha', count: 20 };
@@ -31,13 +33,13 @@ var getTweets = function() {
     }
   });
 };
-//part of getMeSpotify function to return artist name
+// --- part of getMeSpotify function to return artist name --- //
 var getArtistNames = function(artist) {
   return artist.name;
 };
-
+// --- getMeSpotify function --- //
 var getMeSpotify = function(songName) {
-  //If it doesn't find a song, find the Ace of Base song "The Sign"
+// --- If function does not find a song, find the Ace of Base song "The Sign" ---//
   if (songName === undefined) {
     songName = 'The Sign';
   };
@@ -47,13 +49,13 @@ var getMeSpotify = function(songName) {
       console.log('Error occurred: ' + err);
       return;
     }
-//organize returned data
+// --- organize returned data ---//
     var songs = data.tracks.items;
     var data = []; //empty array to hold data
 
     for (var i = 0; i < songs.length; i++) {
       data.push({
-        // .map function pushes data to a new object
+        // .map function applies the function to every element in the array
         'artist(s)': songs[i].artists.map(getArtistNames),
         'song name: ': songs[i].name,
         'preview song: ': songs[i].preview_url,
@@ -64,11 +66,11 @@ var getMeSpotify = function(songName) {
     writeToLog(data);
   });
 };
-
+// --- getMeMovie function --- //
 var getMeMovie = function(movieName) {
-
+// --- default --- //
   if (movieName === undefined) {
-    movieName = 'Mr Nobody';
+      movieName = 'Mr Nobody';
   }
 // AJAX call via npm package
   var urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=full&tomatoes=true&r=json";
@@ -96,7 +98,7 @@ var getMeMovie = function(movieName) {
   });
 
 }
-
+// --- doWhatItSays function --- //
 var doWhatItSays = function() {
   fs.readFile("random.txt", "utf8", function(error, data) {
     console.log(data);
@@ -111,7 +113,7 @@ var doWhatItSays = function() {
 
   });
 }
-
+// --- pick function takes in data from user input and runs appropriate function ---//
 var pick = function(caseData, functionData) {
   switch (caseData) {
     case 'my-tweets':
@@ -130,7 +132,7 @@ var pick = function(caseData, functionData) {
       console.log('LIRI doesn\'t know that');
   }
 }
-
+// --- writeToLog function uses var fs to send test to log.txt ---//
 var writeToLog = function(data) {
   fs.appendFile("log.txt", '\r\n\r\n');
 
@@ -143,9 +145,9 @@ var writeToLog = function(data) {
   });
 };
 
-
+// --- sends index values to pick function ---//
 var runThis = function(argOne, argTwo) {
   pick(argOne, argTwo);
 };
-
+// --- takes in index values of 2 and 3 --- //
 runThis(process.argv[2], process.argv[3]);
